@@ -1,5 +1,10 @@
 package application;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -34,21 +39,21 @@ public class sellerView {
 		sellABook.setX(100);
 		sellABook.setY(40);
 		
-		Text category = new Text("Book Category: ");
-		category.setX(250);
-		category.setY(150);
+		Text categoryText = new Text("Book Category: ");
+		categoryText.setX(250);
+		categoryText.setY(150);
 		
-		Text condition = new Text("Book Condition: ");
-		condition.setX(250);
-		condition.setY(200);
+		Text conditionText = new Text("Book Condition: ");
+		conditionText.setX(250);
+		conditionText.setY(200);
         
 		Text originalPrice = new Text("Original Price: ");
 		originalPrice.setX(250);
 		originalPrice.setY(250);
 		
-		Text name = new Text("Name: ");
-		name.setX(250);
-		name.setY(110);
+		Text nameText = new Text("Name: ");
+		nameText.setX(250);
+		nameText.setY(110);
 		
 		Text buyingPrice = new Text("Buying Price: ");
 		
@@ -119,7 +124,7 @@ public class sellerView {
 		//StackPane layout = new StackPane();
 		
 		root.getChildren().add(rectangle);
-        root.getChildren().addAll(sellABook,name, category, condition, originalPrice);
+        root.getChildren().addAll(sellABook,nameText, categoryText, conditionText, originalPrice);
         root.getChildren().addAll(vBox1, hBox1, hBox2);
         
         // Add action to the Go Back button
@@ -128,6 +133,51 @@ public class sellerView {
             try {
                 mainView.start(stage); // Navigate back to the main screen
             } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+        
+        addToList.setOnAction(e -> {
+            // Retrieve input data
+            String name = nameField.getText();
+            String category = categoryComboBox.getValue();
+            String condition = conditionComboBox.getValue();
+            String price = priceField.getText();
+
+            // Convert condition to integer value (mapping)
+            int conditionValue = 0;
+            if ("Mint".equals(condition)) {
+                conditionValue = 1;
+            } else if ("Average".equals(condition)) {
+                conditionValue = 2;
+            } else if ("Poor".equals(condition)) {
+                conditionValue = 3;
+            }
+
+            // Makes sure that the Original Price is a Double (error handling if not valid)
+            double priceValue = 0;
+            try {
+                priceValue = Double.parseDouble(price);
+            } catch (NumberFormatException ex) {
+                System.out.println("Invalid price input");
+                return; // Exit if price is invalid
+            }
+
+            // Prepare the file and write the data
+            File file = new File("books.txt");
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) { // true to append to the file
+                // Write the name on the first line
+                writer.write(name);
+                writer.newLine();
+                
+                // Write category, condition, and price on the second line
+                writer.write(category + " " + conditionValue + " " + priceValue);
+                writer.newLine();
+                
+                System.out.println("Book listed successfully!");
+
+            } catch (IOException ex) {
+                System.out.println("An error occurred while writing to the file.");
                 ex.printStackTrace();
             }
         });
