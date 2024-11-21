@@ -15,6 +15,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -31,11 +32,25 @@ public class sellerView {
 		
 		// Create a rectangle at (100, 50) with width 600 and height 350
         Rectangle rectangle = new Rectangle(100, 50, 600, 350);
-        rectangle.setFill(Color.WHITE); // Set fill color
-        rectangle.setStroke(Color.BLACK); // Set border color
+        
+        // Set the fill color to ASU gold
+        rectangle.setFill(Color.web("#FFC627")); // ASU gold
+
+        // Set the border (stroke) color to ASU maroon
+        rectangle.setStroke(Color.web("#8C1D40")); // ASU maroon
+
+        
+        rectangle.setStrokeWidth(5);
+        
+        // Round the corners
+        rectangle.setArcWidth(20); 
+        rectangle.setArcHeight(20); 
+        
         
         //text
-		Text sellABook = new Text("Sell A Book");
+		Text sellABook = new Text("Sell-A-Book");
+		sellABook.setFont(Font.font("Impact", 30));
+		sellABook.setFill(Color.web("#8C1D40"));
 		sellABook.setX(100);
 		sellABook.setY(40);
 		
