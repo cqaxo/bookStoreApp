@@ -64,9 +64,18 @@ public class Login extends Application {
 
         Button loginButton = new Button("Login");
         loginButton.setStyle("-fx-font-size: 16px; -fx-background-color: #8C1D40; -fx-text-fill: white;");
+        
+        // Text for displaying error messages
+        Text errorMessage = new Text();
+        errorMessage.setFont(Font.font("Arial", 14)); // Smaller font for errors
+        errorMessage.setFill(Color.RED); 
+        errorMessage.setVisible(false); // Initially hidden
+        
+        
+        
 
         // Add UI elements to layout
-        layout.getChildren().addAll(titleBox, asuIDField, passwordField, loginButton);
+        layout.getChildren().addAll(titleBox, asuIDField, passwordField, loginButton, errorMessage);
 
         // Handle login button click
         loginButton.setOnAction(e -> {
@@ -75,6 +84,7 @@ public class Login extends Application {
 
             // Check if credentials are valid and route to the respective view
             if (checkCredentials(asuID, password)) {
+            	 errorMessage.setVisible(false);
                 if (asuID.equals("admin")) {
                     showAdminView(primaryStage);
                 } else if (asuID.equals("seller")) {
@@ -83,7 +93,9 @@ public class Login extends Application {
                     showBuyerView(primaryStage);
                 }
             } else {
-                System.out.println("Incorrect ASU ID or password.");
+            	// Display error message
+                errorMessage.setText("Incorrect ASU ID or password. Please try again.");
+                errorMessage.setVisible(true);
             }
         });
 
