@@ -28,7 +28,6 @@ public class Main extends Application {
 		// Start at login view
         Login loginScreen = new Login();
         loginScreen.start(primaryStage); // Pass the primary stage to the Login class
-        
 		
 		// Path to the file
         String bookPath = "src/books.txt"; // Adjust this path as needed
@@ -62,43 +61,43 @@ public class Main extends Application {
             e.printStackTrace();
         }
 		
-        /*
-         * Commented out to implement login functionality
-         * If needed, you can uncomment it for testing purposes
-         * 
+
+//        Commented out to implement login functionality
+//        If needed, you can uncomment it for testing purposes
+
 		Group root = new Group();
 		Scene scene = new Scene(root);
-		
+
 		primaryStage.setWidth(800);
 		primaryStage.setHeight(500);
-		
+
 		//Buttons
 		Button sellView = new Button("Seller's View");
 		sellView.setPrefSize(80,40);
 		sellView.setStyle("-fx-font-size: 9px;");
-		
+
 		Button buyView = new Button("Buyer's View");
 		buyView.setPrefSize(80,40);
 		buyView.setStyle("-fx-font-size: 9px;");
-		
+
 		Button adminView = new Button("Administrator's View");
 		buyView.setPrefSize(80,40);
 		buyView.setStyle("-fx-font-size: 9px;");
-		
+
 		//HBoxes
 		HBox layout = new HBox(50);
 		layout.getChildren().addAll(buyView, sellView, adminView);
 		layout.setLayoutX(150);
 		layout.setLayoutY(320);
-		
+
 		root.getChildren().addAll(layout);
-		
+
 		// Set button action to switch to sellerView
         sellView.setOnAction(e -> {
             sellerView sellerScreen = new sellerView(primaryStage); // Pass stage to sellerView
             sellerScreen.showSellerView();
         });
-        
+
         //this one goes to buyer view
         buyView.setOnAction(e -> {
             buyerView buyerScreen = new buyerView(primaryStage); // Pass stage to sellerView
@@ -109,11 +108,9 @@ public class Main extends Application {
             adminView adminScreen = new adminView(primaryStage); // Pass stage to sellerView
             adminScreen.showAdminView();
         });
-		
+
 		primaryStage.setScene(scene);
 		primaryStage.show();
-	
-	*/
         
 	}
 	

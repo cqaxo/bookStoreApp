@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.geometry.Pos;
-
 //Need to implement adding a user, tracking users, tracking transactions, and reseting password
 
 import javafx.scene.Group;
