@@ -200,6 +200,7 @@ public class adminView {
 
         // Set the new scene on the stage
         stage.setScene(adminScene);
+		stage.setTitle("SunDevil Bookstore - Admin View");
 	}
 	public void showAddUserView() {
 		

@@ -196,5 +196,6 @@ public class sellerView {
 
         // Set the new scene on the stage
         stage.setScene(sellerScene);
+        stage.setTitle("SunDevil Bookstore - Seller View");
     }
 }

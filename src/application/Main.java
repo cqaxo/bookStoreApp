@@ -9,22 +9,17 @@ import java.util.List;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.geometry.*;
+import javafx.scene.text.*;
+import javafx.scene.paint.*;
 
 
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
-		
 		// Start at login view
         Login loginScreen = new Login();
         loginScreen.start(primaryStage); // Pass the primary stage to the Login class
@@ -62,35 +57,46 @@ public class Main extends Application {
         }
 		
 
-//        Commented out to implement login functionality
-//        If needed, you can uncomment it for testing purposes
+        // Main Stage
+        primaryStage.setWidth(800);
+        primaryStage.setHeight(500);
 
-		Group root = new Group();
-		Scene scene = new Scene(root);
+        // Main container
+        VBox root = new VBox(20);
+        root.setPadding(new Insets(20));
+        root.setStyle(
+                        "-fx-background-color: #FFC627;" +
+                        "-fx-border-color: #8C1D40;" +
+                        "-fx-border-width: 5;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;"
+        );
+        root.setAlignment(Pos.CENTER);
 
-		primaryStage.setWidth(800);
-		primaryStage.setHeight(500);
+        // Title
+        Text title = new Text("SunDevil Bookstore");
+        title.setFont(Font.font("Times New Roman", 50));
+        title.setFill(Color.web("#8C1D40"));
+        StackPane header = new StackPane(title);
+        header.setStyle("-fx-background-color: white; -fx-padding: 10;");
+        root.getChildren().add(header);
 
-		//Buttons
+        // Button layout
+        HBox buttonLayout = new HBox(30);
+        buttonLayout.setAlignment(Pos.CENTER);
+
+		// Buttons
 		Button sellView = new Button("Seller's View");
-		sellView.setPrefSize(80,40);
-		sellView.setStyle("-fx-font-size: 9px;");
+		sellView.setStyle("-fx-background-color: #8C1D40; -fx-text-fill: #FFC627; -fx-font-weight: bold;");
 
 		Button buyView = new Button("Buyer's View");
-		buyView.setPrefSize(80,40);
-		buyView.setStyle("-fx-font-size: 9px;");
+		buyView.setStyle("-fx-background-color: #8C1D40; -fx-text-fill: #FFC627; -fx-font-weight: bold;");
 
 		Button adminView = new Button("Administrator's View");
-		buyView.setPrefSize(80,40);
-		buyView.setStyle("-fx-font-size: 9px;");
+		adminView.setStyle("-fx-background-color: #8C1D40; -fx-text-fill: #FFC627; -fx-font-weight: bold;");
 
-		//HBoxes
-		HBox layout = new HBox(50);
-		layout.getChildren().addAll(buyView, sellView, adminView);
-		layout.setLayoutX(150);
-		layout.setLayoutY(320);
-
-		root.getChildren().addAll(layout);
+        buttonLayout.getChildren().addAll(sellView, buyView, adminView);
+        root.getChildren().add(buttonLayout);
 
 		// Set button action to switch to sellerView
         sellView.setOnAction(e -> {
@@ -109,12 +115,14 @@ public class Main extends Application {
             adminScreen.showAdminView();
         });
 
-		primaryStage.setScene(scene);
-		primaryStage.show();
-        
+        // Set Main scene to front
+        Scene mainScene = new Scene(root, 800, 500);
+        primaryStage.setScene(mainScene);
+        primaryStage.setTitle("SunDevil Bookstore - Main");
+        primaryStage.show();
 	}
-	
-	
+
+
         
 	public static void main(String[] args) {
 		launch(args);
