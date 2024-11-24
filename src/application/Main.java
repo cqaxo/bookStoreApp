@@ -56,6 +56,7 @@ public class Main extends Application {
             e.printStackTrace();
         }
 		
+        /* Uncomment to test different views
 
         // Main Stage
         primaryStage.setWidth(800);
@@ -120,6 +121,8 @@ public class Main extends Application {
         primaryStage.setScene(mainScene);
         primaryStage.setTitle("SunDevil Bookstore - Main");
         primaryStage.show();
+
+        */
 	}
 
 
