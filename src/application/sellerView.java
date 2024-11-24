@@ -95,12 +95,21 @@ public class sellerView {
 
         //Combo boxes
         ComboBox<String> categoryComboBox = new ComboBox<>();
-        categoryComboBox.getItems().addAll("Fiction", "Non-Fiction", "Science", "History");
+        categoryComboBox.getItems().addAll("Fiction", "Non-Fiction", "Textbook", "Other");
         categoryComboBox.setPromptText("Select Category");
 
         ComboBox<String> conditionComboBox = new ComboBox<>();
-        conditionComboBox.getItems().addAll("Mint", "Average", "poor");
+        conditionComboBox.getItems().addAll("Mint", "Average", "Poor");
         conditionComboBox.setPromptText("Select Condition");
+
+        // Calculate result dynamically
+        conditionComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            updateCalculatedResult(priceField.getText(), newValue, resultField);
+        });
+
+        priceField.textProperty().addListener((observable, oldValue, newValue) -> {
+            updateCalculatedResult(newValue, conditionComboBox.getValue(), resultField);
+        });
 
         //Buttons
         Button logoutButton = new Button("Logout");
@@ -117,7 +126,6 @@ public class sellerView {
         vBox1.getChildren().addAll(nameField, categoryComboBox, conditionComboBox, priceField);
         vBox1.setLayoutX(370);
         vBox1.setLayoutY(95);
-
 
 
         HBox hBox1 = new HBox(340);
@@ -152,6 +160,7 @@ public class sellerView {
             String category = categoryComboBox.getValue();
             String condition = conditionComboBox.getValue();
             String price = priceField.getText();
+            String calculatedResult = resultField.getText();
 
             // Convert condition to integer value (mapping)
             int conditionValue = 0;
@@ -180,7 +189,7 @@ public class sellerView {
                 writer.newLine();
 
                 // Write category, condition, and price on the second line
-                writer.write(category + " " + conditionValue + " " + priceValue);
+                writer.write(category + " " + conditionValue + " " + calculatedResult);
                 writer.newLine();
 
                 System.out.println("Book listed successfully!");
@@ -197,5 +206,35 @@ public class sellerView {
         // Set the new scene on the stage
         stage.setScene(sellerScene);
         stage.setTitle("SunDevil Bookstore - Seller View");
+    }
+
+    private void updateCalculatedResult(String priceText, String condition, TextField resultField) {
+        if (priceText.isEmpty() || condition == null) {
+            resultField.setText("Calculated Result"); // No price or condition provided
+            return;
+        }
+
+        try {
+            double price = Double.parseDouble(priceText);
+            double calculatedPrice = 0;
+
+            switch (condition) {
+                case "Mint":
+                    calculatedPrice = price * 0.9;
+                    break;
+                case "Average":
+                    calculatedPrice = price * 0.7;
+                    break;
+                case "Poor":
+                    calculatedPrice = price * 0.5;
+                    break;
+                default:
+                    resultField.setText("Invalid Condition");
+                    return;
+            }
+            resultField.setText(String.format("%.2f", calculatedPrice));
+        } catch (NumberFormatException e) {
+            resultField.setText("Invalid Price");
+        }
     }
 }

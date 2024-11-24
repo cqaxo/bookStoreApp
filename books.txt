@@ -1,8 +1,4 @@
-123
-Fiction 1 100.0
-123
-Fiction 1 100000.0
-abc
-Fiction 1 123.0
-123
-Non-Fiction 2 321.0
+teletubbies
+Fiction 1 72.00
+grinch
+Fiction 2 8.40

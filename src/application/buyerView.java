@@ -54,7 +54,7 @@ public class buyerView {
 		categoryDropdown.setPromptText("Select Category");
 
 		ComboBox<String> conditionDropdown = new ComboBox<>();
-		conditionDropdown.getItems().addAll("New", "Like New", "Used", "Very Used");
+		conditionDropdown.getItems().addAll("Mint", "Average", "Poor");
 		conditionDropdown.setPromptText("Select Condition");
 
 		TextField priceField = new TextField();
