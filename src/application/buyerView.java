@@ -83,12 +83,11 @@ public class buyerView {
 		navigationButtons.setStyle("-fx-background-color: lightgray;");
 		navigationButtons.setSpacing(20);
 
-		Button goBackButton = new Button("Go Back");
+
 		Button logoutButton = new Button("Logout");
-		goBackButton.setStyle("-fx-background-color: maroon; -fx-text-fill: gold; -fx-font-weight: bold;");
 		logoutButton.setStyle("-fx-background-color: maroon; -fx-text-fill: gold; -fx-font-weight: bold;");
 
-		navigationButtons.getChildren().addAll(goBackButton, logoutButton);
+		navigationButtons.getChildren().add(logoutButton);
 		navigationButtons.setPadding(new Insets(15));
 		root.setBottom(navigationButtons);
 
@@ -102,11 +101,7 @@ public class buyerView {
 			}
 		});
 
-		// Go Back button action
-		goBackButton.setOnAction(e -> {
-			// Logic to go back (not implemented here)
-			System.out.println("Go back button clicked!");
-		});
+
 
 		// Set the scene and stage
 		Scene buyerScene = new Scene(root, 800, 500);

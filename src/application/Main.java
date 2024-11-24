@@ -30,9 +30,9 @@ public class Main extends Application {
         loginScreen.start(primaryStage); // Pass the primary stage to the Login class
 		
 		// Path to the file
-        String bookPath = "src/books.txt"; // Adjust this path as needed
-        String userPath = "src/users.txt"; // Adjust this path as needed
-        String transactionPath = "src/transactions.txt"; // Adjust this path as needed
+        String bookPath = "books.txt"; // Adjust this path as needed
+        String userPath = "users.txt"; // Adjust this path as needed
+        String transactionPath = "transactions.txt"; // Adjust this path as needed
 
         // List to store BookInfo objects
         List<bookInfo> books = new ArrayList<>();
