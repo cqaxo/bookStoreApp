@@ -3,56 +3,49 @@ package application;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
+import javafx.scene.text.*;
 import javafx.stage.Stage;
+import javafx.geometry.*;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Login extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
         primaryStage.setWidth(800);
         primaryStage.setHeight(500);
 
-
-
         // Create UI elements
-
-        VBox layout = new VBox(20); // VBox with 20px spacing
-        layout.setAlignment(Pos.CENTER);
+        VBox layout = new VBox(20); // Main layout container
+        layout.setPadding(new Insets(10));
         layout.setStyle(
-                "-fx-padding: 30; " +
-                        "-fx-background-color: #FFC627; " + // Background color (ASU gold)
+                "-fx-background-color: #FFC627; " + // Background color (ASU gold)
                         "-fx-border-color: #8C1D40; " + // Border color (ASU maroon)
                         "-fx-border-width: 5; " + // Border width
                         "-fx-border-radius: 10; " + //round corners
                         "-fx-background-radius: 10;"
         );
-
-        // SunDevil Book Store title on 3 lines
-        Text titleLine1 = new Text("SunDevil");
-        titleLine1.setFont(Font.font("Impact", 36));
-        titleLine1.setFill(Color.web("#8C1D40")); // ASU maroon
-
-        Text titleLine2 = new Text("Book");
-        titleLine2.setFont(Font.font("Impact", 36));
-        titleLine2.setFill(Color.web("#8C1D40"));
-
-        Text titleLine3 = new Text("Store");
-        titleLine3.setFont(Font.font("Impact", 36));
-        titleLine3.setFill(Color.web("#8C1D40"));
+        layout.setAlignment(Pos.CENTER);
 
 
-        // group the title lines
-        VBox titleBox = new VBox(5);
-        titleBox.getChildren().addAll(titleLine1, titleLine2, titleLine3);
-        titleBox.setAlignment(Pos.CENTER); // centering the title text
+        // Title
+        Text title = new Text("SunDevil Bookstore");
+        title.setFont(Font.font("Times New Roman", 50));
+        title.setFill(Color.web("#8C1D40"));
+        StackPane header = new StackPane(title);
+        header.setStyle("-fx-background-color: white; -fx-padding: 10;");
+        layout.getChildren().add(header);
+
+        // Input layout
+        VBox inputLayout = new VBox(30);
+        inputLayout.setAlignment(Pos.CENTER);
+        inputLayout.setTranslateY(30);
 
         TextField asuIDField = new TextField();
         asuIDField.setPromptText("Enter your ASU ID");
@@ -64,6 +57,7 @@ public class Login extends Application {
 
         Button loginButton = new Button("Login");
         loginButton.setStyle("-fx-font-size: 16px; -fx-background-color: #8C1D40; -fx-text-fill: #FFC627;");
+        loginButton.setTranslateY(20);
 
         // Text for displaying error messages
         Text errorMessage = new Text();
@@ -71,50 +65,65 @@ public class Login extends Application {
         errorMessage.setFill(Color.RED);
         errorMessage.setVisible(false); // Initially hidden
 
+        // Add inputs fields to input layout
+        inputLayout.getChildren().addAll(asuIDField, passwordField, loginButton, errorMessage);
 
-
-
-        // Add UI elements to layout
-        layout.getChildren().addAll(titleBox, asuIDField, passwordField, loginButton, errorMessage);
+        // Add input layout to main layout
+        layout.getChildren().add(inputLayout);
 
         // Handle login button click
         loginButton.setOnAction(e -> {
-            String asuID = asuIDField.getText();
-            String password = passwordField.getText();
+            String asuID = asuIDField.getText().trim();
+            String password = passwordField.getText().trim();
+            String accessLevel = checkCredentials(asuID, password);
 
             // Check if credentials are valid and route to the respective view
-            if (checkCredentials(asuID, password)) {
+            if (accessLevel != null) {
                 errorMessage.setVisible(false);
-                if (asuID.equals("admin")) {
-                    showAdminView(primaryStage);
-                } else if (asuID.equals("seller")) {
-                    showSellerView(primaryStage);
-                } else if (asuID.equals("buyer")) {
-                    showBuyerView(primaryStage);
+                switch (accessLevel) {
+                    case "Admin":
+                        showAdminView(primaryStage); // Switch to admin view
+                        break;
+                    case "Seller":
+                        showSellerView(primaryStage); // Switch to seller view
+                        break;
+                    case "Buyer":
+                        showBuyerView(primaryStage); // Switch to buyer view
+                        break;
+                    default:
+                        errorMessage.setText("Unknown access level"); // No access level in users.txt for this user
+                        errorMessage.setVisible(true);
                 }
             } else {
-                // Display error message
-                errorMessage.setText("Incorrect ASU ID or password. Please try again.");
+                errorMessage.setText("Incorrect ASU ID or password. Please try again."); // Incorrect username or password
                 errorMessage.setVisible(true);
             }
         });
 
         // Set up the scene
         Scene scene = new Scene(layout, 800, 500);
-
         primaryStage.setScene(scene);
+        primaryStage.setTitle("SunDevil Bookstore - Login");
         primaryStage.show();
     }
 
-    /* 
-    	Temporary way of logging in
-    	will need to implement actual authentication login later
-    
-    */
-    private boolean checkCredentials(String asuID, String password) {
-        // Placeholder for actual authentication logic
-        return !asuID.isEmpty() && !password.isEmpty();
-    }
+    // Check username, password, and accessLevel against users.txt
+    private String checkCredentials(String asuID, String password) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("users.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] details = line.split(" ");
+                // Compare username and password against users.txt
+                if (details.length == 3 && details[0].equals(asuID) && details[1].equals(password)) {
+                    return details[2]; // Return access level
+                }
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace(); // Catch errors
+        }
+    return null; // Return null if no match
+}
 
     // Show admin view
     private void showAdminView(Stage primaryStage) {
