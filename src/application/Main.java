@@ -25,6 +25,11 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		
+		// Start at login view
+        Login loginScreen = new Login();
+        loginScreen.start(primaryStage); // Pass the primary stage to the Login class
+        
+		
 		// Path to the file
         String bookPath = "src/books.txt"; // Adjust this path as needed
         String userPath = "src/users.txt"; // Adjust this path as needed
@@ -56,8 +61,11 @@ public class Main extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
+		
+        /*
+         * Commented out to implement login functionality
+         * If needed, you can uncomment it for testing purposes
+         * 
 		Group root = new Group();
 		Scene scene = new Scene(root);
 		
@@ -104,9 +112,13 @@ public class Main extends Application {
 		
 		primaryStage.setScene(scene);
 		primaryStage.show();
+	
+	*/
+        
 	}
 	
 	
+        
 	public static void main(String[] args) {
 		launch(args);
 	}

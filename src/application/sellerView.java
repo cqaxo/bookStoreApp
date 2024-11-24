@@ -7,8 +7,6 @@ import java.io.IOException;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -17,6 +15,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -33,11 +32,25 @@ public class sellerView {
 		
 		// Create a rectangle at (100, 50) with width 600 and height 350
         Rectangle rectangle = new Rectangle(100, 50, 600, 350);
-        rectangle.setFill(Color.WHITE); // Set fill color
-        rectangle.setStroke(Color.BLACK); // Set border color
+        
+        // Set the fill color to ASU gold
+        rectangle.setFill(Color.web("#FFC627")); // ASU gold
+
+        // Set the border (stroke) color to ASU maroon
+        rectangle.setStroke(Color.web("#8C1D40")); // ASU maroon
+
+        
+        rectangle.setStrokeWidth(5);
+        
+        // Round the corners
+        rectangle.setArcWidth(20); 
+        rectangle.setArcHeight(20); 
+        
         
         //text
-		Text sellABook = new Text("Sell A Book");
+		Text sellABook = new Text("Sell-A-Book");
+		sellABook.setFont(Font.font("Impact", 30));
+		sellABook.setFill(Color.web("#8C1D40"));
 		sellABook.setX(100);
 		sellABook.setY(40);
 		
@@ -80,14 +93,13 @@ public class sellerView {
         TextField resultField = new TextField("Calculated Result");
         resultField.setDisable(true);  // Completely disables the TextField
         
-        
         //Combo boxes
         ComboBox<String> categoryComboBox = new ComboBox<>();
         categoryComboBox.getItems().addAll("Fiction", "Non-Fiction", "Science", "History");
         categoryComboBox.setPromptText("Select Category");
         
         ComboBox<String> conditionComboBox = new ComboBox<>();
-        conditionComboBox.getItems().addAll("Used like new", "Moderately used", "Heavily used");
+        conditionComboBox.getItems().addAll("Mint", "Average", "poor");
         conditionComboBox.setPromptText("Select Condition");
         
         //Buttons
@@ -102,17 +114,6 @@ public class sellerView {
 		Button logout = new Button("Logout");
 		addToList.setPrefSize(80,40);
 		addToList.setStyle("-fx-font-size: 9px;");
-		
-		//Listeners
-		// Add listener to update the result when Original Price and condition
-		// are inputed.
-        priceField.textProperty().addListener((observable, oldValue, newValue) -> {
-            updateResultField(priceField, conditionComboBox, resultField);
-        });
-
-        conditionComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-            updateResultField(priceField, conditionComboBox, resultField);
-        });
 		
         //VBox and HBox Layout
         VBox vBox1 = new VBox(20);
@@ -156,15 +157,15 @@ public class sellerView {
             String name = nameField.getText();
             String category = categoryComboBox.getValue();
             String condition = conditionComboBox.getValue();
-            String price = resultField.getText();
+            String price = priceField.getText();
 
             // Convert condition to integer value (mapping)
             int conditionValue = 0;
-            if ("Used like new".equals(condition)) {
+            if ("Mint".equals(condition)) {
                 conditionValue = 1;
-            } else if ("Moderately used".equals(condition)) {
+            } else if ("Average".equals(condition)) {
                 conditionValue = 2;
-            } else if ("Heavily used".equals(condition)) {
+            } else if ("Poor".equals(condition)) {
                 conditionValue = 3;
             }
 
@@ -174,19 +175,11 @@ public class sellerView {
                 priceValue = Double.parseDouble(price);
             } catch (NumberFormatException ex) {
                 System.out.println("Invalid price input");
-                
-                //ALert the user the book was successfully added
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Unsuccessful");
-                alert.setHeaderText(null);
-                alert.setContentText("Please, fill out the form.");
-                alert.showAndWait();
-                
                 return; // Exit if price is invalid
             }
 
             // Prepare the file and write the data
-            File file = new File("src/application/books.txt");
+            File file = new File("books.txt");
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) { // true to append to the file
                 // Write the name on the first line
                 writer.write(name);
@@ -202,20 +195,6 @@ public class sellerView {
                 System.out.println("An error occurred while writing to the file.");
                 ex.printStackTrace();
             }
-            
-            // Clear input fields after successful addition
-            categoryComboBox.setValue(null);  
-            conditionComboBox.setValue(null); 
-            priceField.clear();               
-            resultField.clear();              
-            nameField.clear();
-            
-            //ALert the user the book was successfully added
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setHeaderText(null);
-            alert.setContentText("Book added successfully!");
-            alert.showAndWait();
         });
 		
         //Scene sellerScene = new Scene(layout, 800, 500);
@@ -224,36 +203,4 @@ public class sellerView {
         // Set the new scene on the stage
         stage.setScene(sellerScene);
 	}
-	
-	//method to update resultPrice
-	private void updateResultField(TextField priceField, ComboBox<String> conditionComboBox, TextField resultField) {
-	    String priceText = priceField.getText();
-	    String condition = conditionComboBox.getValue();
-	    
-	    if (priceText != null && !priceText.isEmpty() && condition != null) {
-	        try {
-	            double originalPrice = Double.parseDouble(priceText);
-	            double resultPrice = originalPrice;
-
-	            switch (condition) {
-	                case "Used like new":
-	                    resultPrice = originalPrice; // No discount
-	                    break;
-	                case "Moderately used":
-	                    resultPrice = originalPrice * 0.90; // 10% discount
-	                    break;
-	                case "Heavily used":
-	                    resultPrice = originalPrice * 0.75; // 25% discount
-	                    break;
-	            }
-
-	            resultField.setText(String.format("%.2f", resultPrice)); // Update resultField
-	        } catch (NumberFormatException e) {
-	            resultField.setText("Invalid price"); // Handle invalid input gracefully
-	        }
-	    } else {
-	        resultField.setText(""); // Clear resultField if inputs are incomplete
-	    }
-	}
-
 }

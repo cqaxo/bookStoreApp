@@ -33,7 +33,7 @@ public class adminView {
 	//private ListView userListAcc = new ListView();
 	private ListView tranList = new ListView();
 	// List for Users
-    List<userInfo> users = new ArrayList<>();
+    //List<userInfo> users = new ArrayList<>();
     
     // list for transactions
     List<transactionInfo> transactions = new ArrayList<>();
@@ -296,7 +296,7 @@ public class adminView {
 		stage.setScene(adminScene);
 	}
 	public void populateData() {
-		users.clear();
+		//users.clear();
 		transactions.clear();
 		tranList.getItems().clear();
 		userListName.getItems().clear();
@@ -309,16 +309,16 @@ public class adminView {
                 String name = details[0];
             	String password = details[1];
                 String access = details[2];
-                users.add(new userInfo(name, password, access));
+                //users.add(new userInfo(name, password, access));
                 }
             
         } catch (IOException e) {
             e.printStackTrace();
         }
-		for (int i = 0; i < users.size(); i++) {
+		/*for (int i = 0; i < users.size(); i++) {
 			userListName.getItems().add(users.get(i).name + "        " + users.get(i).pass + "       " + users.get(i).access);
 		}
-		
+		*/
 		try (BufferedReader readert = new BufferedReader(new FileReader("transactions.txt"))) {
             String linet;
             while ((linet = readert.readLine()) != null) {
