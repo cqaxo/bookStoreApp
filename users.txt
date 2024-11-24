@@ -2,3 +2,6 @@ abc c Buyer
 asdf asdf Buyer
 ally love Seller
 admin admin Admin
+admin Admin
+seller Seller
+buyer Buyer
